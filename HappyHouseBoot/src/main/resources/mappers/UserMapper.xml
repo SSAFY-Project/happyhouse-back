@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.model.mapper.UserMapper">
+	<!-- UserDaoImpl 가져오기 -->
+
+	<resultMap id="resultMap_user" type="userDto" >
+		<id column="user_id" property="userId" />
+		<result column="user_email" property="userEmail" />
+		<result column="user_password" property="userPwd" />
+		<result column="user_address" property="userAddr" />
+		<result column="user_name" property="userName" />
+		<result column="user_tel" property="userTel" />
+	</resultMap>
+	
+	<select id="login" parameterType="map" resultMap="resultMap_user">
+		select *
+		from user
+		where user_id = #{userId} and user_password = #{userPwd}
+	</select>
+
+	<update id="changePwd">
+		update user
+		set user_password = #{userPwd}
+		where user_id = #{userId}
+	</update>
+
+	<update id="modifyUser">
+		update user
+		set user_email = #{userPwd}
+		where user_id = #{userId}
+	</update>
+
+	<select id="getUser" parameterType="string" resultMap="resultMap_user">
+		select *
+		from user
+		where user_id = #{userId}
+	</select>
+
+	<insert id="registerUser">
+		insert into (user_id, user_email, user_password, user_address,
+		user_register_date, user_name, user_tel)
+		values #{userId}, #{userEmail}, #{userPwd}, #{userAddr}, now(), #{userName},
+		#{userTel}
+	</insert>
+
+	<delete id="deleteUser" parameterType="string">
+		delete from user
+		where user_id = #{userId}
+	</delete>
+
+</mapper>

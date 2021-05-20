@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.model.mapper.HouseDealMapper">
+
+	<!-- HouseDealDaoImpl 가져오기 --> 
+
+	<select id ="searchByDong" parameterType="string" resultType="houseDealDto">
+	select * from housedeal
+	where aptName like concat('%', #{dong}, '%')
+	</select>
+	
+	<select id ="searchByAptName" parameterType="string" resultType="houseDealDto">
+	select * from housedeal
+	where aptName like concat('%', #{aptName}, '%')
+	</select>
+	
+	<select id="listAll" resultType="houseDealDto">
+	select * from housedeal
+	</select>
+	
+	<select id="joinByCode">
+	select hi.buildYear buildYear, hd.aptName aptName, hd.dealAmount dealAmount, hd.area area, hd.floor floor, hd.jibun jibun
+	from housedeal hd
+	inner join houseinfo hi
+	on hd.code = hi.code and hd.aptName = hi.aptName
+	where hi.dong = #{dong} and hi.aptName = #{aptName}
+	order by dealAmount
+	</select>
+</mapper>
