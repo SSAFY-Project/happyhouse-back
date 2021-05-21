@@ -59,14 +59,15 @@ public class FavoriteController {
 	
 	// 관심지역 정보 delete
 	@DeleteMapping(value="deleteFav")
-	private ResponseEntity<FavoriteDto> deleteFav(@RequestParam String userId, @RequestParam long baseCode) throws Exception {
+	private ResponseEntity<Void> deleteFav(@RequestParam String userId, @RequestParam long baseCode) throws Exception {
 		logger.debug("deleteFav - 호출");
 		
-		FavoriteDto fd = favoriteService.deleteFav(userId, baseCode);
-		if (fd != null) {
-			return new ResponseEntity<FavoriteDto>(fd, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<FavoriteDto>(HttpStatus.BAD_REQUEST);
+		try {
+			favoriteService.deleteFav(userId, baseCode);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
 	}

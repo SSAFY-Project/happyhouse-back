@@ -1,9 +1,7 @@
 package com.ssafy.happyhouse.service;
 
-import java.util.HashMap;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +31,8 @@ public class FavoriteServiceImpl implements FavoriteService {
 	}
 
 	@Override
-	public FavoriteDto deleteFav(String userId, long baseCode) throws Exception {
-		return sqlSession.getMapper(FavoriteMapper.class).deleteFav(userId, baseCode);
+	public void deleteFav(String userId, long baseCode) throws Exception {
+		sqlSession.getMapper(FavoriteMapper.class).deleteFav(userId, baseCode);
 	}
 
 	@Override

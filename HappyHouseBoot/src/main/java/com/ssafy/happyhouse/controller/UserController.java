@@ -44,63 +44,63 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping(value="login")
-	public String login() {
-		return "user/login";
-	}
-	
-//	@PostMapping(value="login")
-//	private ResponseEntity<UserDto> login(@RequestParam Map<String, String> map, HttpSession session, HttpServletResponse response) throws ServletException, IOException {
-//		UserDto ud = userService.login(map);
-//
-//		if(ud != null) {
-//			session.setAttribute("userinfo", ud);
-//			
-//			Cookie cookie = new Cookie("save_id", ud.getUserId());
-//			cookie.setPath("/");
-//			if("saveok".equals(map.get("idsave"))) {
-//				cookie.setMaxAge(60 * 60 * 24 * 365 * 40);//40년간 저장.
-//			} else {
-//				cookie.setMaxAge(0);
-//			}
-//			response.addCookie(cookie);
-//			return new ResponseEntity<UserDto>(ud, HttpStatus.OK);
-//			
-//		} else {
-//			return new ResponseEntity(HttpStatus.BAD_REQUEST);
-//		}
-//		
+//	@GetMapping(value="login")
+//	public String login() {
+//		return "user/login";
 //	}
 	
 	@PostMapping(value="login")
-	public String login(@RequestParam Map<String, String> map, Model model, HttpSession session, HttpServletResponse response) {
-		logger.debug("get in login post");
-		logger.debug(map.get("userId") + " " + map.get("userPwd"));
-		
-		try {
-			UserDto memberDto = userService.login(map);
-			if(memberDto != null) {
-				session.setAttribute("userinfo", memberDto);
-				logger.debug("로그인된 아이디: " + memberDto.getUserId());
-				Cookie cookie = new Cookie("save_id", memberDto.getUserId());
-				cookie.setPath("/");
-				if("saveok".equals(map.get("idsave"))) {
-					cookie.setMaxAge(60 * 60 * 24 * 365 * 40);//40년간 저장.
-				} else {
-					cookie.setMaxAge(0);
-				}
-				response.addCookie(cookie);
-				logger.info("get in login success");
+	private ResponseEntity<UserDto> login(@RequestParam Map<String, String> map, HttpSession session, HttpServletResponse response) throws ServletException, IOException {
+		UserDto ud = userService.login(map);
+
+		if(ud != null) {
+			session.setAttribute("userinfo", ud);
+			
+			Cookie cookie = new Cookie("save_id", ud.getUserId());
+			cookie.setPath("/");
+			if("saveok".equals(map.get("idsave"))) {
+				cookie.setMaxAge(60 * 60 * 24 * 365 * 40);//40년간 저장.
 			} else {
-				model.addAttribute("msg", "아이디 또는 비밀번호 확인 후 로그인해 주세요.");
+				cookie.setMaxAge(0);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("msg", "로그인 중 문제가 발생했습니다.");
-			return "error/error";
+			response.addCookie(cookie);
+			return new ResponseEntity<UserDto>(ud, HttpStatus.OK);
+			
+		} else {
+			return new ResponseEntity<UserDto>(ud,HttpStatus.BAD_REQUEST);
 		}
-		return "index";
+		
 	}
+	
+//	@PostMapping(value="login")
+//	public String login(@RequestParam Map<String, String> map, Model model, HttpSession session, HttpServletResponse response) {
+//		logger.debug("get in login post");
+//		logger.debug(map.get("userId") + " " + map.get("userPwd"));
+//		
+//		try {
+//			UserDto memberDto = userService.login(map);
+//			if(memberDto != null) {
+//				session.setAttribute("userinfo", memberDto);
+//				logger.debug("로그인된 아이디: " + memberDto.getUserId());
+//				Cookie cookie = new Cookie("save_id", memberDto.getUserId());
+//				cookie.setPath("/");
+//				if("saveok".equals(map.get("idsave"))) {
+//					cookie.setMaxAge(60 * 60 * 24 * 365 * 40);//40년간 저장.
+//				} else {
+//					cookie.setMaxAge(0);
+//				}
+//				response.addCookie(cookie);
+//				logger.info("get in login success");
+//			} else {
+//				model.addAttribute("msg", "아이디 또는 비밀번호 확인 후 로그인해 주세요.");
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			model.addAttribute("msg", "로그인 중 문제가 발생했습니다.");
+//			return "error/error";
+//		}
+//		return "index";
+//	}
 
 	@GetMapping(value="logout")
 	private String logout(HttpSession session) throws IOException {

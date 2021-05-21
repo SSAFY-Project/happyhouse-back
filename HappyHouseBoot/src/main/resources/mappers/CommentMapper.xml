@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ssafy.happyhouse.dao.CommentMapper">
+
+	<resultMap id="commentResult"
+		type="commentDto">
+		<result property="commentId" column="comment_id" />
+		<result property="boardId" column="board_id" />
+		<result property="userId" column="user_id" />
+		<result property="noticeDate" column="notice_date" />
+		<result property="commentText" column="comment_text" />
+	</resultMap>
+
+	<resultMap id="userResult" type="userDto" >
+		<id column="user_id" property="userId" />
+		<result column="user_email" property="userEmail" />
+		<result column="user_password" property="userPwd" />
+		<result column="user_address" property="userAddr" />
+		<result column="user_name" property="userName" />
+		<result column="user_tel" property="userTel" />
+	</resultMap>
+
+	<resultMap id="commentUsersResult"
+		type="commentDto">
+		<result property="commentId" column="comment_id" />
+		<result property="boardId" column="board_id" />
+		<result property="userId" column="user_id" />
+		<result property="noticeDate" column="notice_date" />
+		<result property="commentText" column="comment_text" />
+		<association property="userDto" javaType="UserDto">
+			<result property="userName" column="user_name" />
+		</association>
+	</resultMap>
+
+	<!-- 모든 댓글 받아오기 -->
+	<select id="getComments" parameterType="int" resultType="HashMap">
+		select
+		comment_id as commentId,board_id as boardId,c.user_id as userId,notice_date as noticeDate,
+		comment_text as commentText,u.user_name as userName
+		from comment as c JOIN user as u ON (c.user_id=u.user_id)
+		where board_id=#{boardId}
+		ORDER BY notice_date DESC
+	</select>
+
+	<!-- 하나의 댓글 받아오기 -->
+	<select id="getComment" parameterType="int" resultType="HashMap">
+		select
+		comment_id as commentId,board_id as boardId,c.user_id as userId,notice_date as noticeDate,
+		comment_text as commentText,u.user_name as userName
+		from comment as c JOIN user as u ON (c.user_id=u.user_id)
+		where comment_id=#{commentId}
+	</select>
+	
+	<insert id="inputComment" parameterType="HashMap">
+		<selectKey resultType="integer" keyProperty="commentId" order="BEFORE">
+			select MAX(comment_id)+1 from comment
+		</selectKey>
+		insert into comment values
+		(#{commentId},#{boardId},#{userId},NOW(),#{commentText})
+	</insert>
+
+	<update id="updateComment" parameterType="HashMap">
+		update comment
+		set comment_text = #{commentText}
+		where
+		comment_id=#{commentId} and board_id=#{boardId}
+	</update>
+
+	<delete id="deleteComment" parameterType="int">
+		delete
+		from comment
+		where comment_id=#{commentId}
+	</delete>
+	
+</mapper> 
