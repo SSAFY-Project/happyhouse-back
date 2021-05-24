@@ -12,14 +12,16 @@
 		<result column="user_address" property="userAddr" />
 		<result column="user_name" property="userName" />
 		<result column="user_tel" property="userTel" />
+		<result column="user_role" property="userRole" />
+		<result column="user_register_date" property="userRegisterDate" />
 	</resultMap>
-	
-	<select id="login" parameterType="map" resultMap="resultMap_user">
+
+<!-- 	<select id="login" parameterType="map" resultMap="resultMap_user">
 		select *
 		from user
 		where user_id = #{userId} and user_password = #{userPwd}
-	</select>
-
+	</select> -->
+	
 	<update id="changePwd">
 		update user
 		set user_password = #{userPwd}
@@ -37,13 +39,6 @@
 		from user
 		where user_id = #{userId}
 	</select>
-
-	<insert id="registerUser">
-		insert into (user_id, user_email, user_password, user_address,
-		user_register_date, user_name, user_tel)
-		values #{userId}, #{userEmail}, #{userPwd}, #{userAddr}, now(), #{userName},
-		#{userTel}
-	</insert>
 
 	<delete id="deleteUser" parameterType="string">
 		delete from user

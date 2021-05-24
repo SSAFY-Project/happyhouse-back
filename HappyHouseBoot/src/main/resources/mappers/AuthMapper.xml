@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.happyhouse.dao.AuthMapper">
+
+	<resultMap id="resultMap_user" type="userDto" >
+		<id column="user_id" property="userId" />
+		<result column="user_email" property="userEmail" />
+		<result column="user_password" property="userPwd" />
+		<result column="user_address" property="userAddr" />
+		<result column="user_register_date" property="userRegisterDate" />
+		<result column="user_name" property="userName" />
+		<result column="user_tel" property="userTel" />
+		<result column="user_role" property="userRole" />
+	</resultMap>
+	
+	<select id="findByUserId" parameterType="string" resultMap="resultMap_user">
+		select *
+		from user
+		where user_id = #{userId}
+	</select>
+	
+	<insert id="registerUser">
+		insert into user (user_id, user_email, user_password, user_address, user_register_date, user_name, user_tel, user_role)
+		values (#{userId}, #{userEmail}, #{userPwd}, #{userAddr}, now(), #{userName}, #{userTel}, #{userRole})
+	</insert>
+	
+</mapper>

@@ -71,7 +71,9 @@ CREATE TABLE `user` (
   `user_address` varchar(50) DEFAULT NULL,
   `user_register_date` datetime DEFAULT NULL,
   `user_name` varchar(45) NOT NULL,
-  `user_tel` varchar(45) NOT NULL
+  `user_tel` varchar(45) NOT NULL,
+  `user_role` varchar(100) DEFAULT 'ROLE_USER',
+  PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `guestbook` (
