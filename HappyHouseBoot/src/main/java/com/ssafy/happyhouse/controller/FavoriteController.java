@@ -59,11 +59,11 @@ public class FavoriteController {
 	
 	// 관심지역 정보 delete
 	@DeleteMapping(value="deleteFav")
-	private ResponseEntity<Void> deleteFav(@RequestParam String userId, @RequestParam long baseCode) throws Exception {
+	private ResponseEntity<Void> deleteFav(@RequestParam String userId, @RequestParam int housedealId) throws Exception {
 		logger.debug("deleteFav - 호출");
 		
 		try {
-			favoriteService.deleteFav(userId, baseCode);
+			favoriteService.deleteFav(userId, housedealId);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -74,10 +74,10 @@ public class FavoriteController {
 	
 	// 해당 관심지역 정보 1개 가져오기
 	@GetMapping(value="getFavInfo")
-	private ResponseEntity<FavoriteDto> selectFav(@RequestParam String userId, @RequestParam long baseCode) throws Exception {
+	private ResponseEntity<FavoriteDto> selectFav(@RequestParam String userId, @RequestParam int housedealId) throws Exception {
 		logger.debug("selectFav - 호출");
 		
-		FavoriteDto fd = favoriteService.selectFav(userId, baseCode);
+		FavoriteDto fd = favoriteService.selectFav(userId, housedealId);
 		if (fd != null) {
 			return new ResponseEntity<FavoriteDto>(fd, HttpStatus.OK);
 		} else {
@@ -100,8 +100,8 @@ public class FavoriteController {
 		
 	// 해당 지역에 대한 관심지역 정보 모두 가져오기
 	@GetMapping(value="getFavListByBaseCode")
-	private ResponseEntity<List<FavoriteDto>> selectByBaseCode(@RequestParam long baseCode) throws Exception {
-		List<FavoriteDto> list = favoriteService.selectByBaseCode(baseCode);
+	private ResponseEntity<List<FavoriteDto>> selectByHouseDealId(@RequestParam int housedealId) throws Exception {
+		List<FavoriteDto> list = favoriteService.selectByHouseDealId(housedealId);
 		if (list != null) {
 			return new ResponseEntity<List<FavoriteDto>>(list, HttpStatus.OK);
 		} else {

@@ -1,6 +1,7 @@
 package com.ssafy.happyhouse.controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 
@@ -29,8 +30,8 @@ private static final Logger logger = LoggerFactory.getLogger(AdminController.cla
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping(value="selectById")
-	private ResponseEntity<UserDto> getUser(@RequestParam("userId") String userId) throws ServletException, IOException {
+	@GetMapping(value="selectUserById")
+	private ResponseEntity<UserDto> selectUserById(@RequestParam("userId") String userId) throws ServletException, IOException {
 		
 		try {
 			UserDto ud = userService.getUser(userId);
@@ -42,7 +43,20 @@ private static final Logger logger = LoggerFactory.getLogger(AdminController.cla
 		}
 	}
 	
-	@DeleteMapping(value="delete")
+	@GetMapping(value="selectUsers")
+	private ResponseEntity<List<UserDto>> selectUsers() throws ServletException, IOException {
+		
+		try {
+			List<UserDto> list = userService.getUsers();
+			return new ResponseEntity<List<UserDto>>(list, HttpStatus.OK);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<List<UserDto>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@DeleteMapping(value="deleteUser")
 	private ResponseEntity<Void> deleteUser(@RequestParam("userId") String userId) {
 		try {
 			userService.deleteUser(userId);

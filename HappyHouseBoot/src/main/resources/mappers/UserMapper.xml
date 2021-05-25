@@ -15,12 +15,6 @@
 		<result column="user_role" property="userRole" />
 		<result column="user_register_date" property="userRegisterDate" />
 	</resultMap>
-
-<!-- 	<select id="login" parameterType="map" resultMap="resultMap_user">
-		select *
-		from user
-		where user_id = #{userId} and user_password = #{userPwd}
-	</select> -->
 	
 	<update id="changePwd">
 		update user
@@ -38,6 +32,11 @@
 		select *
 		from user
 		where user_id = #{userId}
+	</select>
+	
+	<select id="getUsers" resultMap="resultMap_user">
+		select *
+		from user
 	</select>
 
 	<delete id="deleteUser" parameterType="string">

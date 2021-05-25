@@ -9,9 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ssafy.happyhouse.dto.UserDto;
 
+@Mapper
 public interface UserMapper {
-	// 로그인
-	// UserDto login(Map<String, String> map);
 
 	// 비밀번호 변경
 	void changePwd(Map<String, String> map);
@@ -21,9 +20,9 @@ public interface UserMapper {
 
 	// 회원정보 조회
 	UserDto getUser(String userId);
-
-	// 회원가입
-	// UserDto registerUser(UserDto user);
+	
+	// 전체 회원 조회
+	List<UserDto> getUsers();
 
 	// 회원탈퇴
 	void deleteUser(String userId);

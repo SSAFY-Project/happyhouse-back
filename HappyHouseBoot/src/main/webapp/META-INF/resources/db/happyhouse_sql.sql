@@ -17,8 +17,11 @@ CREATE TABLE `dongcode` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `favorite` (
-  `user_id` int NOT NULL,
-  `base_code` bigint NOT NULL
+  `user_id` VARCHAR(20) NOT NULL,
+  `housedeal_id` int NOT NULL,
+  PRIMARY KEY(`user_id`, `housedeal_id`),
+  CONSTRAINT `favorite_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+  CONSTRAINT `favorite_ibfk_2` FOREIGN KEY (`housedeal_id`) REFERENCES `housedeal` (`no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `guguncode` (

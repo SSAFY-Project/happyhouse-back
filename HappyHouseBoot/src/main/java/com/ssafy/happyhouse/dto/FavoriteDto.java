@@ -12,6 +12,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FavoriteDto {
-	private int userId;
-	private long baseCode;
+	private String userId;
+	private int housedealId;
 }

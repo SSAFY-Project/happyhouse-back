@@ -31,13 +31,13 @@ public class FavoriteServiceImpl implements FavoriteService {
 	}
 
 	@Override
-	public void deleteFav(String userId, long baseCode) throws Exception {
-		sqlSession.getMapper(FavoriteMapper.class).deleteFav(userId, baseCode);
+	public void deleteFav(String userId, int housedealId) throws Exception {
+		sqlSession.getMapper(FavoriteMapper.class).deleteFav(userId, housedealId);
 	}
 
 	@Override
-	public FavoriteDto selectFav(String userId, long baseCode) throws Exception {
-		return sqlSession.getMapper(FavoriteMapper.class).selectFav(userId, baseCode);
+	public FavoriteDto selectFav(String userId, int housedealId) throws Exception {
+		return sqlSession.getMapper(FavoriteMapper.class).selectFav(userId, housedealId);
 	}
 
 	@Override
@@ -46,8 +46,8 @@ public class FavoriteServiceImpl implements FavoriteService {
 	}
 
 	@Override
-	public List<FavoriteDto> selectByBaseCode(long baseCode) throws Exception {
-		return sqlSession.getMapper(FavoriteMapper.class).selectByBaseCode(baseCode);
+	public List<FavoriteDto> selectByHouseDealId(int housedealId) throws Exception {
+		return sqlSession.getMapper(FavoriteMapper.class).selectByHouseDealId(housedealId);
 	}
 
 }

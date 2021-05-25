@@ -1,14 +1,18 @@
 package com.ssafy.happyhouse.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,34 +29,63 @@ public class HouseDealController {
 	@Autowired
 	private HouseDealService houseDealService;
 
-	@RequestMapping(value = "/dong", method = RequestMethod.GET)
-	public String searchByDong(Model model, @RequestParam("searchString") String dong) throws Exception {
+	@GetMapping(value = "/dong")
+	public ResponseEntity<Map<String, List<HouseDealDto>>> searchByDong(@RequestParam("searchString") String dong) {
 		logger.debug("searchByDong - 호출");
-		List<HouseDealDto> list = houseDealService.searchByDong(dong);
-		model.addAttribute("list", list);
-		return "searchFilter";
+		try {
+			Map<String, List<HouseDealDto>> resultMap = new HashMap<String, List<HouseDealDto>>();
+			
+			List<HouseDealDto> list = houseDealService.searchByDong(dong);
+			resultMap.put("dongList", list);
+			return new ResponseEntity<Map<String, List<HouseDealDto>>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, List<HouseDealDto>>>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
-	@RequestMapping(value = "/aptname", method = RequestMethod.GET)
-	public String searchByAptName(Model model, @RequestParam("searchString") String aptName) throws Exception {
+	@GetMapping(value = "/aptname")
+	public ResponseEntity<Map<String, List<HouseDealDto>>> searchByAptName(@RequestParam("searchString") String aptName)  {
 		logger.debug("searchByAptName - 호출");
-		List<HouseDealDto> list = houseDealService.searchByAptName(aptName);
-		model.addAttribute("list", list);
-		return "searchFilter";
+		try {
+			Map<String, List<HouseDealDto>> resultMap = new HashMap<String, List<HouseDealDto>>();
+			
+			List<HouseDealDto> list = houseDealService.searchByAptName(aptName);
+			resultMap.put("aptList", list);
+			return new ResponseEntity<Map<String, List<HouseDealDto>>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, List<HouseDealDto>>>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
-	@RequestMapping(value = "/all", method = RequestMethod.GET)
-	public String searchAll(Model model) throws Exception {
+	@GetMapping(value = "/all")
+	public ResponseEntity<Map<String, List<HouseDealDto>>> searchAll() throws Exception {
 		logger.debug("searchAll - 호출");
-		List<HouseDealDto> list = houseDealService.listAll();
-		model.addAttribute("list", list);
-		return "searchFilter";
+		try {
+			Map<String, List<HouseDealDto>> resultMap = new HashMap<String, List<HouseDealDto>>();
+			
+			List<HouseDealDto> list = houseDealService.listAll();
+			resultMap.put("totalList", list);
+			return new ResponseEntity<Map<String, List<HouseDealDto>>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, List<HouseDealDto>>>(HttpStatus.BAD_REQUEST);
+		}
 	}
 
-	@RequestMapping(value = "/markerlist", method = RequestMethod.GET)
-	public List<HouseDealDto> searchMarkerList(@RequestParam Map<String, String> map) throws Exception {
+	@GetMapping(value = "/markerlist")
+	public ResponseEntity<Map<String, List<HouseDealDto>>> searchMarkerList(@RequestBody Map<String, String> map) throws Exception {
 		logger.debug("searchMarkerList - 호출");
-		List<HouseDealDto> list = houseDealService.joinByCode(map);
-		return list;
+		try {
+			Map<String, List<HouseDealDto>> resultMap = new HashMap<String, List<HouseDealDto>>();
+			
+			List<HouseDealDto> list = houseDealService.joinByCode(map);
+			resultMap.put("markerList", list);
+			return new ResponseEntity<Map<String, List<HouseDealDto>>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<String, List<HouseDealDto>>>(HttpStatus.BAD_REQUEST);
+		}
 	}
 }

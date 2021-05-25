@@ -8,7 +8,7 @@
 
 	<select id ="searchByDong" parameterType="string" resultType="houseDealDto">
 	select * from housedeal
-	where aptName like concat('%', #{dong}, '%')
+	where dong like concat('%', #{dong}, '%')
 	</select>
 	
 	<select id ="searchByAptName" parameterType="string" resultType="houseDealDto">
@@ -20,7 +20,7 @@
 	select * from housedeal
 	</select>
 	
-	<select id="joinByCode">
+	<select id="joinByCode" parameterType="map" resultType="houseDealDto">
 	select hi.buildYear buildYear, hd.aptName aptName, hd.dealAmount dealAmount, hd.area area, hd.floor floor, hd.jibun jibun
 	from housedeal hd
 	inner join houseinfo hi

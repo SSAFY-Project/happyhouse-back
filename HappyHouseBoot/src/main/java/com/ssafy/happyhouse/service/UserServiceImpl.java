@@ -1,27 +1,16 @@
 package com.ssafy.happyhouse.service;
 
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.happyhouse.dao.UserMapper;
-import com.ssafy.happyhouse.dto.LoginDto;
 import com.ssafy.happyhouse.dto.UserDto;
-import com.ssafy.happyhouse.exception.DuplicatedUsernameException;
-import com.ssafy.happyhouse.exception.LoginFailedException;
-import com.ssafy.happyhouse.exception.UserNotFoundException;
-import com.ssafy.happyhouse.jwt.JwtTokenProvider;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -50,6 +39,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void deleteUser(String userId) {
 		sqlSession.getMapper(UserMapper.class).deleteUser(userId);
+	}
+
+	@Override
+	public List<UserDto> getUsers() {
+		return sqlSession.getMapper(UserMapper.class).getUsers();
 	}
 
 }
