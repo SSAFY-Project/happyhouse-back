@@ -42,3 +42,5 @@ https://www.notion.so/HappyHouse-API-83bbf191abae40e78ba431e37980f842
 - Blog : https://blog.naver.com/lovesujin051
 - E-mail : lovesujin05173@gmail.com
 
+[Donggil](https://github.com/donggillee-dev)
+- E-mail : donggillee94@gmail.com
