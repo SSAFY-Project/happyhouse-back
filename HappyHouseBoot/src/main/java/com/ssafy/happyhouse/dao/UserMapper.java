@@ -13,10 +13,10 @@ import com.ssafy.happyhouse.dto.UserDto;
 public interface UserMapper {
 
 	// 비밀번호 변경
-	void changePwd(Map<String, String> map);
+	int changePwd(Map<String, String> map);
 
 	// 회원정보 수정 - 이메일, 주소, 전화번호  수정 가능
-	UserDto modifyUser(String userId);
+	int modifyUser(Map<String, String> map);
 
 	// 회원정보 조회
 	UserDto getUser(String userId);

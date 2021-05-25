@@ -58,7 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.antMatchers("/*/register", "/*/login").permitAll()
 		.antMatchers("/admin/**").hasRole("ADMIN") // 관리자페이지는 관리자 권한만
 		.antMatchers(HttpMethod.GET, "/**").permitAll() // GET 요청은 TOKEN없이 접근 가능
-		.anyRequest().hasRole("USER") // user role이여야함 // 해당 url에 대한 요청 인증없이 요청 허용
+		// .anyRequest().hasRole("USER") // user role이여야함 // 해당 url에 대한 요청 인증없이 요청 허용
+		.anyRequest().access("hasRole('USER') or hasRole('ADMIN')")
 		
 		// vue 적용시, 원하는 login page mapping
 		// .and()

@@ -15,30 +15,24 @@ public class HouseDealServiceImpl implements HouseDealService {
 
 	@Autowired
 	private SqlSession sqlSession;
-//	@Autowired
-//	private HouseDealMapper houseDealDao;
 	
 	@Override
 	public List<HouseDealDto> searchByDong(String dong) throws Exception {
 		return sqlSession.getMapper(HouseDealMapper.class).searchByDong(dong);
-//		return houseDealDao.searchByDong(dong);
 	}
 
 	@Override
 	public List<HouseDealDto> searchByAptName(String aptName) throws Exception {
 		return sqlSession.getMapper(HouseDealMapper.class).searchByAptName(aptName);
-//		return houseDealDao.searchByAptName(AptName);
 	}
 
 	@Override
 	public List<HouseDealDto> listAll() throws Exception {
 		return sqlSession.getMapper(HouseDealMapper.class).listAll();
-//		return houseDealDao.listAll();
 	}
 
 	@Override
-	public List<HouseDealDto> joinByCode(Map<String, String> map) throws Exception {
-		return sqlSession.getMapper(HouseDealMapper.class).joinByCode(map);
-//		return houseDealDao.joinByCode(dong, AptName);
+	public List<HouseDealDto> joinByCode(String dong, String aptName) throws Exception {
+		return sqlSession.getMapper(HouseDealMapper.class).joinByCode(dong, aptName);
 	}
 }

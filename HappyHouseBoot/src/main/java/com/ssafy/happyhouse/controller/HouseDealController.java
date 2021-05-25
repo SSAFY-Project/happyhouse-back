@@ -75,12 +75,12 @@ public class HouseDealController {
 	}
 
 	@GetMapping(value = "/markerlist")
-	public ResponseEntity<Map<String, List<HouseDealDto>>> searchMarkerList(@RequestBody Map<String, String> map) throws Exception {
+	public ResponseEntity<Map<String, List<HouseDealDto>>> searchMarkerList(@RequestParam("dong") String dong, @RequestParam("aptName") String aptName) throws Exception {
 		logger.debug("searchMarkerList - 호출");
 		try {
 			Map<String, List<HouseDealDto>> resultMap = new HashMap<String, List<HouseDealDto>>();
 			
-			List<HouseDealDto> list = houseDealService.joinByCode(map);
+			List<HouseDealDto> list = houseDealService.joinByCode(dong, aptName);
 			resultMap.put("markerList", list);
 			return new ResponseEntity<Map<String, List<HouseDealDto>>>(resultMap, HttpStatus.OK);
 		} catch (Exception e) {

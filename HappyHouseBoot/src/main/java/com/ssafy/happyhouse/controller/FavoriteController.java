@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.happyhouse.dto.FavoriteDto;
 import com.ssafy.happyhouse.service.FavoriteService;
 
-// 관심지역 설정 구현
+// 관심매물 구현
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/favorite")
@@ -33,46 +33,35 @@ public class FavoriteController {
 	private FavoriteService favoriteService;
 
 	
-	// 관심지역 insert
+	// 관심매물 insert
 	@PostMapping(value="/insertFav")
-	private ResponseEntity<FavoriteDto> insertFav(@RequestBody FavoriteDto favoriteDto) throws Exception {
+	private ResponseEntity<Integer> insertFav(@RequestBody FavoriteDto favoriteDto) throws Exception {
 		logger.debug("insertFav - 호출");
-		FavoriteDto fd = favoriteService.insertFav(favoriteDto);
-		if (fd != null) {
-			return new ResponseEntity<FavoriteDto>(fd, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<FavoriteDto>(HttpStatus.BAD_REQUEST);
+		try {
+			int rslt = favoriteService.insertFav(favoriteDto);
+			return new ResponseEntity<Integer>(rslt, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	// 해당 인덱스 관심지역 정보 변경
-	@PutMapping(value="updateFav")
-	private ResponseEntity<FavoriteDto> updateFav(@RequestBody FavoriteDto favoriteDto) throws Exception {
-		logger.debug("updateFav - 호출");
-		FavoriteDto fd = favoriteService.updateFav(favoriteDto);
-		if (fd != null) {
-			return new ResponseEntity<FavoriteDto>(fd, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<FavoriteDto>(HttpStatus.BAD_REQUEST);
-		}
-	}
-	
-	// 관심지역 정보 delete
+	// 관심매물 정보 delete
 	@DeleteMapping(value="deleteFav")
-	private ResponseEntity<Void> deleteFav(@RequestParam String userId, @RequestParam int housedealId) throws Exception {
+	private ResponseEntity<Integer> deleteFav(@RequestParam String userId, @RequestParam int housedealId) throws Exception {
 		logger.debug("deleteFav - 호출");
 		
 		try {
-			favoriteService.deleteFav(userId, housedealId);
-			return new ResponseEntity<>(HttpStatus.OK);
+			int rslt = favoriteService.deleteFav(userId, housedealId);
+			return new ResponseEntity<Integer>(rslt, HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
 		}
 		
 	}
 	
-	// 해당 관심지역 정보 1개 가져오기
+	// 관심매물 정보 1개 가져오기
 	@GetMapping(value="getFavInfo")
 	private ResponseEntity<FavoriteDto> selectFav(@RequestParam String userId, @RequestParam int housedealId) throws Exception {
 		logger.debug("selectFav - 호출");
@@ -85,7 +74,7 @@ public class FavoriteController {
 		}
 	}
 	
-	// 해당 유저에 대한 관심지역 정보 모두 가져오기
+	// 해당 유저에 대한 관심매물 정보 모두 가져오기
 	@GetMapping(value="getFavListByUserId")
 	private ResponseEntity<List<FavoriteDto>> selectByUserId(@RequestParam String userId) throws Exception {
 		logger.debug("selectByUserId - 호출");
@@ -98,8 +87,8 @@ public class FavoriteController {
 		}
 	}
 		
-	// 해당 지역에 대한 관심지역 정보 모두 가져오기
-	@GetMapping(value="getFavListByBaseCode")
+	// 해당 지역에 대한 관심매물 정보 모두 가져오기
+	@GetMapping(value="getFavListByHouseDealId")
 	private ResponseEntity<List<FavoriteDto>> selectByHouseDealId(@RequestParam int housedealId) throws Exception {
 		List<FavoriteDto> list = favoriteService.selectByHouseDealId(housedealId);
 		if (list != null) {

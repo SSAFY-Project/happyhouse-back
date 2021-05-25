@@ -3,37 +3,36 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ssafy.happyhouse.dao.FavoriteMapper">
-<!-- FavoriteDaoImpl 가져오기 --> 
 
+	<resultMap id="resultMap_favorite" type="favoriteDto" >
+		<result column="user_id" property="userId" />
+		<result column="housedeal_id" property="housedealId" />
+	</resultMap>
+		
 	<insert id="insertFav" parameterType="favoriteDto">
-		insert into favorite (user_id, base_code) 
-		values #{userId}, #{baseCode}
+		insert into favorite (user_id, housedeal_id) 
+		values (#{userId}, #{housedealId})
 	</insert>
-	
-	<update id="updateFav" parameterType="favoriteDto">
-		update favorite 
-		set base_code = #{baseCode}
-		where user_id = #{userId}
-	</update>
+
 	
 	<delete id="deleteFav">
 	delete from favorite
-	where user_id = #{userId} and base_code = #{baseCode}
+	where user_id = #{userId} and housedeal_id = #{housedealId}
 	</delete>
 	
-	<select id="selectFav" resultType="favoriteDto">
+	<select id="selectFav" resultMap="resultMap_favorite">
 	select * from favorite
-	where user_id = #{userId} and base_code = #{baseCode}
+	where user_id = #{userId} and housedeal_id = #{housedealId}
 	</select>
 	
-	<select id="selectByUserId" parameterType="int" resultType="favoriteDto">
+	<select id="selectByUserId" parameterType="string" resultMap="resultMap_favorite">
 	select * from favorite
 	where user_id = #{userId}
 	</select>
 	
-	<select id="selectByBaseCode" parameterType="long" resultType="favoriteDto">
+	<select id="selectByHouseDealId" parameterType="int" resultMap="resultMap_favorite">
 	select * from favorite
-	where base_code = #{baseCode}
+	where housedeal_id = #{housedealId}
 	</select>
 	
 </mapper>

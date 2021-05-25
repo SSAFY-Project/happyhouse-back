@@ -1,6 +1,7 @@
 package com.ssafy.happyhouse.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,58 +21,95 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.happyhouse.dao.AuthMapper;
 import com.ssafy.happyhouse.dto.LoginDto;
 import com.ssafy.happyhouse.dto.UserDto;
 import com.ssafy.happyhouse.exception.DuplicatedUsernameException;
 import com.ssafy.happyhouse.exception.LoginFailedException;
+import com.ssafy.happyhouse.jwt.JwtTokenProvider;
 import com.ssafy.happyhouse.service.AuthService;
 import com.ssafy.happyhouse.service.UserService;
+
+import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private AuthService authService;
 	
-	@PostMapping(value="login")
-	private ResponseEntity<String> login(@RequestBody LoginDto loginDto) throws ServletException, IOException {
-		
-		try {String token= authService.login(loginDto);
+	private final PasswordEncoder passwordEncoder;
 
-		 HttpHeaders httpHeaders = new HttpHeaders();
-         httpHeaders.add("X-AUTH-TOKEN", token);
-         return new ResponseEntity<>(token, httpHeaders, HttpStatus.OK);
-		} catch(LoginFailedException e) {
+	@PostMapping(value = "login")
+	private ResponseEntity<HashMap<String, String>> login(@RequestBody LoginDto loginDto)
+			throws ServletException, IOException {
+
+		try {
+			HashMap<String, String> resultMap = new HashMap<String, String>();
+			String token = authService.login(loginDto);
+
+			HttpHeaders httpHeaders = new HttpHeaders();
+			httpHeaders.add("X-AUTH-TOKEN", token);
+
+			// 결과에 token이라는 이름으로 생성된 토큰값 넘기기
+			resultMap.put("token", token);
+			return new ResponseEntity<HashMap<String, String>>(resultMap, httpHeaders, HttpStatus.OK);
+		} catch (LoginFailedException e) {
 			logger.debug(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
-		
+
 	}
 
-	@PutMapping(value="changePwd")
-	private ResponseEntity<Void> changePwd(@RequestParam Map<String, String> map) {
+	@PutMapping(value = "changePwd")
+	private ResponseEntity<Integer> changePwd(@RequestBody Map<String, String> map) {
 		try {
-			userService.changePwd(map);
-			return new ResponseEntity<>(HttpStatus.OK);
+			// 비밀번호 암호화 시켜 보내기
+			String encoded_pw=passwordEncoder.encode(map.get("userPwd"));
+			Map<String, String> resultMap = new HashMap<String, String>();
+			resultMap.put("userId", map.get("userId"));
+			resultMap.put("userPwd", encoded_pw);
+			
+			logger.debug("encoded password : " + encoded_pw);
+			int rslt = userService.changePwd(resultMap);
+			return new ResponseEntity<Integer>(rslt, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<Integer>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	@PostMapping(value="register")
+
+	@PutMapping(value = "modify")
+	private ResponseEntity<Map<Integer, UserDto>> modifyUser(@RequestBody Map<String, String> map) {
+		try {
+			// 아이디를 받아 해당 유저 정보 바꾸기
+			int rslt = userService.modifyUser(map);
+			// 바뀐 정보 다시 return
+			HashMap<Integer, UserDto> resultMap = new HashMap<Integer, UserDto>();
+			UserDto userDto = userService.getUser(map.get("userId"));
+			resultMap.put(rslt, userDto);
+			return new ResponseEntity<Map<Integer, UserDto>>(resultMap, HttpStatus.OK);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<Map<Integer, UserDto>>(HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@PostMapping(value = "register")
 	private ResponseEntity<UserDto> registerUser(@RequestBody UserDto userDto) {
-		
+
 		try {
 			UserDto ud = authService.register(userDto);
-		
+
 			return new ResponseEntity<UserDto>(ud, HttpStatus.CREATED); // 201
 		} catch (DuplicatedUsernameException e) {
 			logger.debug(e.getMessage());
@@ -78,7 +117,5 @@ public class UserController {
 			return new ResponseEntity<UserDto>(HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	
 
 }
