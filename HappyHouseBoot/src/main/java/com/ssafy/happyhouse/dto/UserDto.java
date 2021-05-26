@@ -34,7 +34,7 @@ public class UserDto implements UserDetails {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String userPwd;
 	private String userEmail;
-	private String userName;
+	private String userNickName;
 	private String userAddr;
 	private String userTel;
 	private String userRegisterDate;

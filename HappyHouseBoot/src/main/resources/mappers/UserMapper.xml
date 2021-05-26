@@ -10,7 +10,7 @@
 		<result column="user_email" property="userEmail" />
 		<result column="user_password" property="userPwd" />
 		<result column="user_address" property="userAddr" />
-		<result column="user_name" property="userName" />
+		<result column="user_nick_name" property="userNickName" />
 		<result column="user_tel" property="userTel" />
 		<result column="user_role" property="userRole" />
 		<result column="user_register_date" property="userRegisterDate" />
