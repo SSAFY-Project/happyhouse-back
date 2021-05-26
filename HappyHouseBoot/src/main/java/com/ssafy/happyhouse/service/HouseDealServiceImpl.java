@@ -37,8 +37,8 @@ public class HouseDealServiceImpl implements HouseDealService {
 	}
 
 	@Override
-	public List<HouseDealDto> joinByCode(Map<String, String> map) throws Exception {
-		return sqlSession.getMapper(HouseDealMapper.class).joinByCode(map);
+	public List<HouseDealDto> joinByCode(String dong, String aptName) throws Exception {
+		return sqlSession.getMapper(HouseDealMapper.class).joinByCode(dong, aptName);
 //		return houseDealDao.joinByCode(dong, AptName);
 	}
 }

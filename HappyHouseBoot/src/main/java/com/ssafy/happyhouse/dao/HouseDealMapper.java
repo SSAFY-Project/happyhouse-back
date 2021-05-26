@@ -20,5 +20,6 @@ public interface HouseDealMapper {
 		
 		//코드와 아파트명으로 실시간 거래정보 가져오기
 		//Google Map의 특정 마커를 선택하면 그 지역의 매매거래 매물 리스트 가져오는 함수
-		public List<HouseDealDto> joinByCode(Map<String, String> map) throws Exception;
+//		public List<HouseDealDto> joinByCode(Map<String, String> map) throws Exception;
+		public List<HouseDealDto> joinByCode(String dong, String aptName) throws Exception;
 }
