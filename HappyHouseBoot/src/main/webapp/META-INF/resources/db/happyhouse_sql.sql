@@ -9,6 +9,19 @@ CREATE TABLE `baseaddress` (
   PRIMARY KEY (`base_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `comment` (
+  `comment_id` int NOT NULL AUTO_INCREMENT,
+  `board_id` int NOT NULL,
+  `user_id` varchar(20) NOT NULL,
+  `notice_date` datetime NOT NULL,
+  `comment_text` varchar(600) DEFAULT NULL,
+  PRIMARY KEY (`comment_id`),
+  KEY `comment_ibfk_1` (`board_id`),
+  KEY `comment_ibfk_2` (`user_id`),
+  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`board_id`) REFERENCES `guestbook` (`articleno`),
+  CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 CREATE TABLE `dongcode` (
   `dongcode` text,
   `city` text,
@@ -17,11 +30,23 @@ CREATE TABLE `dongcode` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `favorite` (
-  `user_id` VARCHAR(20) NOT NULL,
+  `user_id` varchar(20) NOT NULL,
   `housedeal_id` int NOT NULL,
-  PRIMARY KEY(`user_id`, `housedeal_id`),
+  PRIMARY KEY (`user_id`,`housedeal_id`),
+  KEY `favorite_ibfk_2` (`housedeal_id`),
   CONSTRAINT `favorite_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
   CONSTRAINT `favorite_ibfk_2` FOREIGN KEY (`housedeal_id`) REFERENCES `housedeal` (`no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `guestbook` (
+  `articleno` int NOT NULL AUTO_INCREMENT,
+  `userid` varchar(16) NOT NULL,
+  `subject` varchar(100) NOT NULL,
+  `content` varchar(2000) NOT NULL,
+  `regtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`articleno`),
+  KEY `guestbook_userid_FK_idx` (`userid`),
+  CONSTRAINT `guestbook_userid_FK` FOREIGN KEY (`userid`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `guguncode` (
@@ -70,33 +95,11 @@ CREATE TABLE `sidocode` (
 CREATE TABLE `user` (
   `user_id` varchar(20) NOT NULL,
   `user_email` varchar(20) NOT NULL,
-  `user_password` varchar(20) NOT NULL,
+  `user_password` varchar(100) NOT NULL,
   `user_address` varchar(50) DEFAULT NULL,
   `user_register_date` datetime DEFAULT NULL,
   `user_name` varchar(45) NOT NULL,
   `user_tel` varchar(45) NOT NULL,
   `user_role` varchar(100) DEFAULT 'ROLE_USER',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE `guestbook` (
-  `articleno` int NOT NULL AUTO_INCREMENT,
-  `userid` varchar(16) NOT NULL,
-  `subject` varchar(100) NOT NULL,
-  `content` varchar(2000) NOT NULL,
-  `regtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`articleno`),
-  KEY `guestbook_userid_FK_idx` (`userid`),
-  CONSTRAINT `guestbook_userid_FK` FOREIGN KEY (`userid`) REFERENCES `user` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE `comment` (
-  `comment_id` int NOT NULL AUTO_INCREMENT,
-  `board_id` int NOT NULL,
-  `user_id` varchar(20) NOT NULL,
-  `notice_date` datetime NOT NULL,
-  `comment_text` varchar(600) DEFAULT NULL,
-  PRIMARY KEY (`comment_id`),
-  CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`board_id`) REFERENCES `guestbook` (`articleno`),
-  CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

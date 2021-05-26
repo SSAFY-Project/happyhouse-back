@@ -16,15 +16,15 @@
 		<result column="user_register_date" property="userRegisterDate" />
 	</resultMap>
 	
-	<update id="changePwd">
+	<update id="changePwd" parameterType="map">
 		update user
 		set user_password = #{userPwd}
 		where user_id = #{userId}
 	</update>
 
-	<update id="modifyUser">
+	<update id="modifyUser" parameterType="map">
 		update user
-		set user_email = #{userPwd}
+		set user_email = #{userEmail}, user_address = #{userAddr}, user_tel = #{userTel}
 		where user_id = #{userId}
 	</update>
 

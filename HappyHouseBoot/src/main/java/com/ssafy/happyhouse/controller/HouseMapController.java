@@ -26,25 +26,28 @@ public class HouseMapController {
 
 	@GetMapping(value = "/sido")
 	public List<SidoGugunCodeDto> getSido() throws Exception {
-		logger.debug("getSido - 호출");
+		logger.debug("sido - 호출");
 		List<SidoGugunCodeDto> list = houseMapService.getSido();
 		return list;
 	}
 	
 	@GetMapping(value = "/gugun")
 	public List<SidoGugunCodeDto> getGugun(@RequestParam String sido) throws Exception {
+		logger.debug("gugun - 호출");
 		List<SidoGugunCodeDto> list = houseMapService.getGugunInSido(sido);	
 		return list;
 	}
 	
 	@GetMapping(value = "/dong")
 	public List<HouseInfoDto> getDong(@RequestParam String gugun) throws Exception {
+		logger.debug("dong - 호출");
 		List<HouseInfoDto> list = houseMapService.getDongInGugun(gugun);
 		return list;
 	}
 	
 	@GetMapping(value = "/apt")
 	public List<HouseInfoDto> getApt(@RequestParam String dong) throws Exception {
+		logger.debug("apt - 호출");
 		List<HouseInfoDto> list = houseMapService.getAptInDong(dong);
 		return list;
 	}

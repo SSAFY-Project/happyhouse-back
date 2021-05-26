@@ -20,19 +20,13 @@ public class FavoriteServiceImpl implements FavoriteService {
 	private SqlSession sqlSession;
 	
 	@Override
-	public FavoriteDto insertFav(FavoriteDto favVO) throws Exception {
+	public int insertFav(FavoriteDto favVO) throws Exception {
 		return sqlSession.getMapper(FavoriteMapper.class).insertFav(favVO);
 	}
 
 	@Override
-	public FavoriteDto updateFav(FavoriteDto favVO) throws Exception {
-		return sqlSession.getMapper(FavoriteMapper.class).updateFav(favVO);
-		
-	}
-
-	@Override
-	public void deleteFav(String userId, int housedealId) throws Exception {
-		sqlSession.getMapper(FavoriteMapper.class).deleteFav(userId, housedealId);
+	public int deleteFav(String userId, int housedealId) throws Exception {
+		return sqlSession.getMapper(FavoriteMapper.class).deleteFav(userId, housedealId);
 	}
 
 	@Override
