@@ -1,6 +1,7 @@
 package com.ssafy.happyhouse.service;
 
 import java.util.Collections;
+import java.util.Map;
 
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,7 +25,7 @@ public class AuthService {
 	private final AuthMapper authMapper;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
-
+    
     public String login(LoginDto loginDto) {
 		UserDto userDto = authMapper.findByUserId(loginDto.getUsername())
                 .orElseThrow(() -> new LoginFailedException("잘못된 아이디입니다"));

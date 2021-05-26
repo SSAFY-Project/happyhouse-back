@@ -31,7 +31,7 @@
 
 	<select resultType="houseInfoDto" id="getDongInGugun"
 		parameterType="string">
-		SELECT no, distinct dong, code
+		SELECT no, dong, code
 		FROM houseinfo
 		WHERE code =
 		#{gugun}

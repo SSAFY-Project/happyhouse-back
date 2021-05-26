@@ -10,7 +10,7 @@
 		<result column="user_password" property="userPwd" />
 		<result column="user_address" property="userAddr" />
 		<result column="user_register_date" property="userRegisterDate" />
-		<result column="user_name" property="userName" />
+		<result column="user_nick_name" property="userNickName" />
 		<result column="user_tel" property="userTel" />
 		<result column="user_role" property="userRole" />
 	</resultMap>
@@ -22,8 +22,8 @@
 	</select>
 	
 	<insert id="registerUser">
-		insert into user (user_id, user_email, user_password, user_address, user_register_date, user_name, user_tel, user_role)
-		values (#{userId}, #{userEmail}, #{userPwd}, #{userAddr}, now(), #{userName}, #{userTel}, #{userRole})
+		insert into user (user_id, user_email, user_password, user_address, user_register_date, user_nick_name, user_tel, user_role)
+		values (#{userId}, #{userEmail}, #{userPwd}, #{userAddr}, now(), #{userNickName}, #{userTel}, #{userRole})
 	</insert>
 	
 </mapper>
