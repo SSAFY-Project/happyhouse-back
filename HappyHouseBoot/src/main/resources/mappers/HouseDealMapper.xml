@@ -20,7 +20,7 @@
 	select * from housedeal
 	</select>
 	
-	<select id="joinByCode" parameterType="map" resultType="houseDealDto">
+	<select id="joinByCode" parameterType="string" resultType="houseDealDto">
 	select hi.buildYear buildYear, hd.aptName aptName, hd.dealAmount dealAmount, hd.area area, hd.floor floor, hd.jibun jibun
 	from housedeal hd
 	inner join houseinfo hi
