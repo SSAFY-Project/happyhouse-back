@@ -20,7 +20,7 @@ public class BoardServiceImpl implements BoardService {
 	private SqlSession sqlSession;
 
 	@Override
-	public BoardDto writeArticle(BoardDto guestBookDto) throws Exception {
+	public int writeArticle(BoardDto guestBookDto) throws Exception {
 		if(guestBookDto.getSubject() == null || guestBookDto.getContent() == null) {
 			throw new Exception();
 		}
@@ -46,7 +46,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public BoardDto modifyArticle(BoardDto guestBookDto) throws Exception {
+	public int modifyArticle(BoardDto guestBookDto) throws Exception {
 		return sqlSession.getMapper(BoardMapper.class).modifyArticle(guestBookDto);
 	}
 

@@ -2,6 +2,7 @@ package com.ssafy.happyhouse.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -22,12 +23,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.happyhouse.dao.AuthMapper;
+import com.ssafy.happyhouse.dto.FavoriteDto;
 import com.ssafy.happyhouse.dto.LoginDto;
 import com.ssafy.happyhouse.dto.UserDto;
 import com.ssafy.happyhouse.exception.DuplicatedUsernameException;
 import com.ssafy.happyhouse.exception.LoginFailedException;
 import com.ssafy.happyhouse.jwt.JwtTokenProvider;
 import com.ssafy.happyhouse.service.AuthService;
+import com.ssafy.happyhouse.service.FavoriteService;
 import com.ssafy.happyhouse.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -46,22 +49,29 @@ public class UserController {
 	@Autowired
 	private AuthService authService;
 	
+	@Autowired
+	private FavoriteService FavoriteService;
+	
 	private final PasswordEncoder passwordEncoder;
 
 	@PostMapping(value = "login")
-	private ResponseEntity<HashMap<String, String>> login(@RequestBody LoginDto loginDto)
-			throws ServletException, IOException {
+	private ResponseEntity<HashMap<String, Object>> login(@RequestBody LoginDto loginDto)
+			throws Exception {
 
+		HashMap<String, Object> resultMap=new HashMap<String, Object>();
+		
 		try {
-			HashMap<String, String> resultMap = new HashMap<String, String>();
 			String token = authService.login(loginDto);
-
+			UserDto user=userService.getUser(loginDto.getUsername());
+			List<FavoriteDto> favorite = FavoriteService.selectByUserId(loginDto.getUsername());
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.add("X-AUTH-TOKEN", token);
 
 			// 결과에 token이라는 이름으로 생성된 토큰값 넘기기
 			resultMap.put("token", token);
-			return new ResponseEntity<HashMap<String, String>>(resultMap, httpHeaders, HttpStatus.OK);
+			resultMap.put("user", user);
+			resultMap.put("favorite", favorite);
+			return new ResponseEntity<HashMap<String, Object>>(resultMap, httpHeaders, HttpStatus.OK);
 		} catch (LoginFailedException e) {
 			logger.debug(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

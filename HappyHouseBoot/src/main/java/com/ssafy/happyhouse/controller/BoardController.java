@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.ResultMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,21 +37,20 @@ public class BoardController {
 	@Autowired
 	private CommentService commentService;
 
-	// 글 작성
+	// 글 작성 후 작성된 글 정보 반환
 	@PostMapping(value = "/write")
-	public ResponseEntity<BoardDto> write(@RequestBody BoardDto boardDto, HttpSession session) {
-		UserDto UserDto = (UserDto) session.getAttribute("userinfo");
-		if (UserDto != null) {
-			boardDto.setUserid(UserDto.getUserId());
-			try {
-				BoardDto board = boardService.writeArticle(boardDto);
-				return new ResponseEntity<BoardDto>(board, HttpStatus.OK);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<BoardDto>(HttpStatus.BAD_REQUEST); // 400
+	public ResponseEntity<HashMap<Integer, Object>> write(@RequestBody BoardDto boardDto, HttpSession session) {
+		HashMap<Integer, Object> map = new HashMap<Integer, Object>();
+		
+		try {
+			int rslt = boardService.writeArticle(boardDto);
+			if (rslt == 1) { // 삽입 성공
+				map.put(rslt, boardService.getArticle(boardDto.getArticleno()));
 			}
-		} else {
-			return new ResponseEntity<BoardDto>(HttpStatus.UNAUTHORIZED); // 401
+			return new ResponseEntity<HashMap<Integer, Object>>(map, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<HashMap<Integer, Object>>(HttpStatus.BAD_REQUEST); // 400
 		}
 	}
 
@@ -59,7 +59,7 @@ public class BoardController {
 	public ResponseEntity<List<BoardDto>> list(@RequestParam Map<String, String> map) {
 		String spp = map.get("spp");
 		map.put("spp", spp != null ? spp : "10");// sizePerPage
-		
+
 		try {
 			List<BoardDto> list = boardService.listArticle(map);
 			return new ResponseEntity<List<BoardDto>>(list, HttpStatus.OK);
@@ -72,18 +72,18 @@ public class BoardController {
 	// 게시글 상세보기 - 댓글 포함
 	@GetMapping(value = "/viewDetail")
 	public ResponseEntity<HashMap<String, Object>> viewDetail(@RequestParam(value = "articleno") int articleno) {
-
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
 		// 특정 게시글 상세보기
 		try {
 			BoardDto board = boardService.getArticle(articleno);
-			
-			HashMap<String, Object> map = new HashMap<String, Object>();
+
 			// 해당 게시글 객체
 			map.put("BoardDto", board);
-			//  해당 게시글 댓글 객체
+			// 해당 게시글 댓글 객체
 			List<CommentDto> commentList = commentService.getComments(articleno);
 			map.put("CommentList", commentList);
-			
+
 			return new ResponseEntity<HashMap<String, Object>>(map, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,33 +91,42 @@ public class BoardController {
 		}
 	}
 
-	// 수정 폼 불러올때 원래 내용 가져오기
-	@GetMapping(value = "/modify")
-	public ResponseEntity<BoardDto> modify(@RequestParam("articleno") int articleno) {
+	// 수정 처리
+	@PutMapping(value = "/modify")
+	public ResponseEntity<HashMap<String, Object>> modify(@RequestBody BoardDto boardDto) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
 		try {
-			BoardDto boardDto = boardService.getArticle(articleno);
-			return new ResponseEntity<BoardDto>(boardDto, HttpStatus.OK);
+			// 수정 후
+			boardService.modifyArticle(boardDto);
+
+			// 수정된 게시글과 댓글 반환
+			BoardDto board = boardService.getArticle(boardDto.getArticleno());
+			List<CommentDto> commentList = commentService.getComments(boardDto.getArticleno());
+			resultMap.put("BoardDto", board);
+			resultMap.put("CommentList", commentList);
+			return new ResponseEntity<HashMap<String, Object>>(resultMap, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<BoardDto>(HttpStatus.BAD_REQUEST); // 400
+			return new ResponseEntity<HashMap<String, Object>>(HttpStatus.BAD_REQUEST); // 400
 		}
 	}
 
-	// 수정 처리
-	@PutMapping(value = "/modify")
-	public ResponseEntity<BoardDto> modify(@RequestBody BoardDto boardDto, HttpSession session) {
-		UserDto userDto = (UserDto) session.getAttribute("userinfo");
-		if (userDto != null) {
-			userDto.setUserId(userDto.getUserId());
-			try {
-				boardService.modifyArticle(boardDto);
-				return new ResponseEntity<BoardDto>(boardDto, HttpStatus.OK);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<BoardDto>(HttpStatus.BAD_REQUEST); // 400
-			}
-		} else {
-			return new ResponseEntity<BoardDto>(HttpStatus.UNAUTHORIZED); // 401
+	// 수정 폼 불러올때 기본 틀 채우기 위해 원래 내용 불러오기
+	@GetMapping(value = "/modify")
+	public ResponseEntity<HashMap<String, Object>> modify(@RequestBody BoardDto boardDto, HttpSession session) {
+
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+		try {
+			BoardDto board = boardService.getArticle(boardDto.getArticleno());
+			List<CommentDto> commentList = commentService.getComments(boardDto.getArticleno());
+			resultMap.put("BoardDto", board);
+			resultMap.put("CommentList", commentList);
+			return new ResponseEntity<HashMap<String, Object>>(resultMap, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<HashMap<String, Object>>(HttpStatus.BAD_REQUEST); // 400
 		}
 	}
 

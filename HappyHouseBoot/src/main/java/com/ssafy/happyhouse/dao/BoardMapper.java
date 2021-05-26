@@ -11,12 +11,12 @@ import com.ssafy.happyhouse.dto.BoardDto;
 @Mapper
 public interface BoardMapper {
 
-	public BoardDto writeArticle(BoardDto guestBookDto) throws SQLException;
+	public int writeArticle(BoardDto guestBookDto) throws SQLException;
 	public List<BoardDto> listArticle(Map<String, Object> map) throws SQLException;
 	public int getTotalCount(Map<String, String> map) throws SQLException;
 	
 	public BoardDto getArticle(int articleno) throws SQLException;
-	public BoardDto modifyArticle(BoardDto guestBookDto) throws SQLException;
+	public int modifyArticle(BoardDto guestBookDto) throws SQLException;
 	public void deleteArticle(int articleno) throws SQLException;
 	
 }
