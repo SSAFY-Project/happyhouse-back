@@ -4,36 +4,59 @@
 
 <mapper namespace="com.ssafy.happyhouse.dao.FavoriteMapper">
 
-	<resultMap id="resultMap_favorite" type="favoriteDto" >
+	<resultMap id="resultMap_favorite" type="favoriteDto">
 		<result column="user_id" property="userId" />
 		<result column="housedeal_id" property="housedealId" />
 	</resultMap>
-		
+
+	<resultMap id="resultMap_user_favorite" type="favoriteDto">
+		<result column="user_id" property="userId" />
+		<result column="housedeal_id" property="housedealId" />
+		<association property="houseDealDto" javaType="houseDealDto">
+			<id column="no" property="no" />
+			<result column="dong" property="dong" />
+			<result column="aptName" property="aptName" />
+			<result column="code" property="code" />
+			<result column="dealAmount" property="dealAmount" />
+			<result column="buildYear" property="buildYear" />
+			<result column="dealYear" property="dealYear" />
+			<result column="dealMonth" property="dealMonth" />
+			<result column="dealDay" property="dealDay" />
+			<result column="area" property="area" />
+			<result column="floor" property="floor" />
+			<result column="jibun" property="jibun" />
+			<result column="type" property="type" />
+			<result column="rentMoney" property="rentMoney" />
+		</association>
+	</resultMap>
+
 	<insert id="insertFav" parameterType="favoriteDto">
-		insert into favorite (user_id, housedeal_id) 
+		insert into favorite
+		(user_id, housedeal_id)
 		values (#{userId}, #{housedealId})
 	</insert>
 
-	
+
 	<delete id="deleteFav">
-	delete from favorite
-	where user_id = #{userId} and housedeal_id = #{housedealId}
+		delete from favorite
+		where user_id = #{userId} and housedeal_id = #{housedealId}
 	</delete>
-	
+
 	<select id="selectFav" resultMap="resultMap_favorite">
-	select * from favorite
-	where user_id = #{userId} and housedeal_id = #{housedealId}
+		select * from favorite
+		where user_id = #{userId} and housedeal_id = #{housedealId}
 	</select>
-	
-	<select id="selectByUserId" parameterType="string" resultMap="resultMap_favorite">
-	select *
-	from favorite f, housedeal hd
-	where f.user_id = #{userId} and hd.no = f.housedeal_id
+
+	<select id="selectByUserId" parameterType="string" resultMap="resultMap_user_favorite">
+		select *
+		from favorite f, housedeal hd
+		where f.user_id = #{userId} and hd.no = f.housedeal_id
 	</select>
-	
-	<select id="selectByHouseDealId" parameterType="int" resultMap="resultMap_favorite">
-	select * from favorite
-	where housedeal_id = #{housedealId}
+
+	<select id="selectByHouseDealId" parameterType="int"
+		resultMap="resultMap_favorite">
+		select * from favorite
+		where housedeal_id = #{housedealId}
 	</select>
-	
+
 </mapper>

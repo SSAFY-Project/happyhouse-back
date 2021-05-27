@@ -14,4 +14,5 @@ import lombok.ToString;
 public class FavoriteDto {
 	private String userId;
 	private int housedealId;
+	private HouseDealDto houseDealDto;
 }
