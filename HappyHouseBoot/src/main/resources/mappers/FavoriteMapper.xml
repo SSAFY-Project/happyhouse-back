@@ -26,8 +26,9 @@
 	</select>
 	
 	<select id="selectByUserId" parameterType="string" resultMap="resultMap_favorite">
-	select * from favorite
-	where user_id = #{userId}
+	select *
+	from favorite f, housedeal hd
+	where f.user_id = #{userId} and hd.no = f.housedeal_id
 	</select>
 	
 	<select id="selectByHouseDealId" parameterType="int" resultMap="resultMap_favorite">
