@@ -20,6 +20,8 @@ https://www.erdcloud.com/d/jic64GBJMyhuSFmNe
 ## 👮 : API 문서 (개발중)
 https://www.notion.so/HappyHouse-API-83bbf191abae40e78ba431e37980f842
 
+## 👮 : 관련 자료 정리
+https://drive.google.com/drive/folders/1SFRI2Cp1SWX1Z8sR6PGsYdYlOXa6z6R4
 
 ## :1234: 구현단계
 
