@@ -24,7 +24,7 @@
 
 	<update id="modifyUser" parameterType="map">
 		update user
-		set user_email = #{userEmail}, user_address = #{userAddr}, user_tel = #{userTel}
+		set user_nick_name = #{userNickName}, user_password = #{userPwd}, user_email = #{userEmail}, user_address = #{userAddr}, user_tel = #{userTel}
 		where user_id = #{userId}
 	</update>
 

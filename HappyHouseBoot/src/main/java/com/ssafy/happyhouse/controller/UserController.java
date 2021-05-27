@@ -47,21 +47,20 @@ public class UserController {
 
 	@Autowired
 	private AuthService authService;
-	
+
 	@Autowired
 	private FavoriteService FavoriteService;
-	
+
 	private final PasswordEncoder passwordEncoder;
 
 	@PostMapping(value = "login")
-	private ResponseEntity<HashMap<String, Object>> login(@RequestBody LoginDto loginDto)
-			throws Exception {
+	private ResponseEntity<HashMap<String, Object>> login(@RequestBody LoginDto loginDto) throws Exception {
 
-		HashMap<String, Object> resultMap=new HashMap<String, Object>();
-		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
 		try {
 			String token = authService.login(loginDto);
-			UserDto user=userService.getUser(loginDto.getUsername());
+			UserDto user = userService.getUser(loginDto.getUsername());
 			List<FavoriteDto> favorite = FavoriteService.selectByUserId(loginDto.getUsername());
 			HttpHeaders httpHeaders = new HttpHeaders();
 			httpHeaders.add("X-AUTH-TOKEN", token);
@@ -82,11 +81,11 @@ public class UserController {
 	private ResponseEntity<Integer> changePwd(@RequestBody Map<String, String> map) {
 		try {
 			// 비밀번호 암호화 시켜 보내기
-			String encoded_pw=passwordEncoder.encode(map.get("userPwd"));
+			String encoded_pw = passwordEncoder.encode(map.get("userPwd"));
 			Map<String, String> resultMap = new HashMap<String, String>();
 			resultMap.put("userId", map.get("userId"));
 			resultMap.put("userPwd", encoded_pw);
-			
+
 			logger.debug("encoded password : " + encoded_pw);
 			int rslt = userService.changePwd(resultMap);
 			return new ResponseEntity<Integer>(rslt, HttpStatus.OK);
@@ -99,8 +98,20 @@ public class UserController {
 	@PutMapping(value = "modify")
 	private ResponseEntity<Map<Integer, UserDto>> modifyUser(@RequestBody Map<String, String> map) {
 		try {
+			// 비밀번호 암호화 시켜 보내기
+			String encoded_pw = passwordEncoder.encode(map.get("userPwd"));
+			Map<String, String> request_map = new HashMap<String, String>();
+			request_map.put("userId", map.get("userId"));
+			request_map.put("userPwd", encoded_pw);
+			request_map.put("userNickName", map.get("userNickName"));
+			request_map.put("userEmail", map.get("userEmail"));
+			request_map.put("userTel", map.get("userTel"));
+			request_map.put("userAddr", map.get("userAddr"));
+			
+			logger.debug("encoded password : " + encoded_pw);
 			// 아이디를 받아 해당 유저 정보 바꾸기
-			int rslt = userService.modifyUser(map);
+			int rslt = userService.modifyUser(request_map);
+
 			// 바뀐 정보 다시 return
 			HashMap<Integer, UserDto> resultMap = new HashMap<Integer, UserDto>();
 			UserDto userDto = userService.getUser(map.get("userId"));
