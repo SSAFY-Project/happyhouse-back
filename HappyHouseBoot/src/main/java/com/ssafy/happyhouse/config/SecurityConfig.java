@@ -47,30 +47,29 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
              .accessDeniedHandler(new JwtAccessDeniedHandler())
              .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
              
-        // 세션 설정
-        .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안함
-		
-        // 어떤 url에 대해 권한 체크해줄건지
-        .and()
-        .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크하겠다
-		.antMatchers("/*/register", "/*/login").permitAll()
-		.antMatchers("/admin/**").hasRole("ADMIN") // 관리자페이지는 관리자 권한만
-		.antMatchers(HttpMethod.GET, "/**").permitAll() // GET 요청은 TOKEN없이 접근 가능
-		// .anyRequest().hasRole("USER") // user role이여야함 // 해당 url에 대한 요청 인증없이 요청 허용
-		.anyRequest().access("hasRole('USER') or hasRole('ADMIN')")
-		
-		
-		.and()
-		.formLogin()
-		
-		// vue 적용시, 원하는 login page mapping
-		// .formLogin().loginPage("/user/login") // login page customize
-		// formLogin에는 로그인 성공시 작동할 기능, 실패시 작동할 기능, 로그인 인증 URL 변경 등 다양한 기능들이 있다.
-		
-		.and()
-        .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // ID, Password 검사 전에 jwt 필터 먼저 수
+	        // 세션 설정
+	        .and()
+	        .sessionManagement()
+	        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 사용 안함
+			
+	        // 어떤 url에 대해 권한 체크해줄건지 - 순서 상관있음
+	        .and()
+	        .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크하겠다
+	        .antMatchers(HttpMethod.GET, "/**").permitAll() // GET 요청은 TOKEN없이 접근 가능
+			.antMatchers("/*/register", "/*/login").permitAll()
+			.antMatchers("/admin/**").hasRole("ADMIN") // 관리자페이지는 관리자 권한만
+			// .anyRequest().hasRole("USER") // user role이여야함 // 해당 url에 대한 요청 인증없이 요청 허용
+			.anyRequest().access("hasRole('USER') or hasRole('ADMIN')")
+			
+			.and()
+			.formLogin()
+			
+			// vue 적용시, 원하는 login page mapping
+			// .formLogin().loginPage("/user/login") // login page customize
+			// formLogin에는 로그인 성공시 작동할 기능, 실패시 작동할 기능, 로그인 인증 URL 변경 등 다양한 기능들이 있다.
+			
+			.and()
+	        .addFilterBefore(new JwtFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // ID, Password 검사 전에 jwt 필터 먼저 수
 		
     }
 
