@@ -8,24 +8,25 @@
 
 	<select id ="searchByDong" parameterType="string" resultType="houseDealDto">
 	select * from housedeal
-	where dong like concat('%', #{dong}, '%')
+	where dong like concat('%', #{dong}, '%') limit 100
 	</select>
 	
 	<select id ="searchByAptName" parameterType="string" resultType="houseDealDto">
 	select * from housedeal
-	where aptName like concat('%', #{aptName}, '%')
+	where aptName like concat('%', #{aptName}, '%') limit 100
 	</select>
 	
 	<select id="listAll" resultType="houseDealDto">
-	select * from housedeal
+	select * from housedeal limit 100
 	</select>
 	
 	<select id="joinByCode" parameterType="string" resultType="houseDealDto">
-	select hi.buildYear buildYear, hd.aptName aptName, hd.dealAmount dealAmount, hd.area area, hd.floor floor, hd.jibun jibun
+	select hd.no, hi.buildYear buildYear, hd.aptName aptName, hd.dealAmount dealAmount, hd.area area, hd.floor floor, hd.jibun jibun
 	from housedeal hd
 	inner join houseinfo hi
 	on hd.code = hi.code and hd.aptName = hi.aptName
 	where hi.dong = #{dong} and hi.aptName = #{aptName}
 	order by dealAmount
+	limit 100
 	</select>
 </mapper>
