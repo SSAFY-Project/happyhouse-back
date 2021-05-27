@@ -61,8 +61,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// .anyRequest().hasRole("USER") // user role이여야함 // 해당 url에 대한 요청 인증없이 요청 허용
 		.anyRequest().access("hasRole('USER') or hasRole('ADMIN')")
 		
+		
+		.and()
+		.formLogin()
+		
 		// vue 적용시, 원하는 login page mapping
-		// .and()
 		// .formLogin().loginPage("/user/login") // login page customize
 		// formLogin에는 로그인 성공시 작동할 기능, 실패시 작동할 기능, 로그인 인증 URL 변경 등 다양한 기능들이 있다.
 		

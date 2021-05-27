@@ -6,7 +6,8 @@ CREATE TABLE `baseaddress` (
   `dong` varchar(30) NOT NULL,
   `lat` varchar(20) DEFAULT NULL,
   `lng` varchar(20) DEFAULT NULL,
-  PRIMARY KEY (`base_code`)
+  PRIMARY KEY (`base_code`),
+  CONSTRAINT `baseaddress_ibfk_1` FOREIGN KEY (`base_code`) REFERENCES `dongcode` (`dongcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `comment` (
@@ -23,10 +24,11 @@ CREATE TABLE `comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `dongcode` (
-  `dongcode` text,
-  `city` text,
-  `gugun` text,
-  `dong` text
+  `dongcode` int not null,
+  `city` varchar(20) not null,
+  `gugun` varchar(20) not null,
+  `dong` varchar(20) not null,
+  PRIMARY KEY (`dongcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `favorite` (
@@ -98,7 +100,7 @@ CREATE TABLE `user` (
   `user_password` varchar(100) NOT NULL,
   `user_address` varchar(50) DEFAULT NULL,
   `user_register_date` datetime DEFAULT NULL,
-  `user_name` varchar(45) NOT NULL,
+  `user_nick_name` varchar(45) NOT NULL,
   `user_tel` varchar(45) NOT NULL,
   `user_role` varchar(100) DEFAULT 'ROLE_USER',
   PRIMARY KEY (`user_id`)
