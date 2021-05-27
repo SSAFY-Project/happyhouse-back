@@ -35,7 +35,6 @@ import com.ssafy.happyhouse.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor

@@ -15,7 +15,6 @@ import com.ssafy.happyhouse.dto.HouseInfoDto;
 import com.ssafy.happyhouse.dto.SidoGugunCodeDto;
 import com.ssafy.happyhouse.service.HouseMapService;
 
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/map")
 public class HouseMapController {

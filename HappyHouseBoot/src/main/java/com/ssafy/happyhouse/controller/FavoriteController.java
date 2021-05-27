@@ -22,7 +22,6 @@ import com.ssafy.happyhouse.dto.FavoriteDto;
 import com.ssafy.happyhouse.service.FavoriteService;
 
 // 관심매물 구현
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/favorite")
 public class FavoriteController {

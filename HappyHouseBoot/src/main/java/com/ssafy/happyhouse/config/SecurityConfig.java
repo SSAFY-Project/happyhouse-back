@@ -55,10 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	        // 어떤 url에 대해 권한 체크해줄건지 - 순서 상관있음
 	        .and()
 	        .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크하겠다
+	        .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() //OPTIONS 메소드 허락
 	        .antMatchers(HttpMethod.GET, "/**").permitAll() // GET 요청은 TOKEN없이 접근 가능
 			.antMatchers("/*/register", "/*/login").permitAll()
 			.antMatchers("/admin/**").hasRole("ADMIN") // 관리자페이지는 관리자 권한만
-			// .anyRequest().hasRole("USER") // user role이여야함 // 해당 url에 대한 요청 인증없이 요청 허용
 			.anyRequest().access("hasRole('USER') or hasRole('ADMIN')")
 			
 			.and()

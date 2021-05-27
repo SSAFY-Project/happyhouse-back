@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssafy.happyhouse.dto.UserDto;
 import com.ssafy.happyhouse.service.UserService;
 
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/admin")
 public class AdminController {

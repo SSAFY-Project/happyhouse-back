@@ -24,7 +24,6 @@ import com.ssafy.happyhouse.service.BoardService;
 import com.ssafy.happyhouse.service.CommentService;
 
 // 게시판 - 잡담, 매물관련
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/board")
 public class BoardController {

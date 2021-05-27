@@ -20,7 +20,6 @@ import com.ssafy.happyhouse.dto.HouseDealDto;
 import com.ssafy.happyhouse.service.HouseDealService;
 
 // 동별, 아파트별 검색 기능 구현
-@CrossOrigin(origins = { "*" }, maxAge = 6000)
 @RestController
 @RequestMapping("/search")
 public class HouseDealController {
